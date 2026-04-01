@@ -12,6 +12,8 @@ app = FastAPI(title="main_app")
 origins = [
     "http://localhost:8000",
     "http://localhost:8001",
+    "http://localhost:8002",
+    "http://localhost:8003",
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -53,3 +55,11 @@ async def create_account(url: str, account_id: int):
     async with httpx.AsyncClient() as client:
         response = await client.get(url=f"{url}/{account_id}")
         return response.json()
+    
+@app.put("/get_account_fines")
+async def get_account_fines(url: str, account_id: int):
+    async with httpx.AsyncClient() as client:
+        response = await client.put(url=f"{url}/{account_id}")
+        print(response)
+        return response.json()
+
