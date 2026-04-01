@@ -39,6 +39,17 @@ async def create_db():
 async def create_account(url: str, value: float):
     async with httpx.AsyncClient() as client:
         form_data = {"value": value}
-        print(form_data)
         response = await client.post(url=url, data=form_data)
+        return response.json()
+
+@app.get("/accounts")
+async def create_account(url: str):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url=url)
+        return response.json()
+    
+@app.get("/get_account")
+async def create_account(url: str, account_id: int):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url=f"{url}/{account_id}")
         return response.json()
