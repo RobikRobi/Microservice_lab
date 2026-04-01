@@ -2,12 +2,26 @@ import httpx
 from fastapi import FastAPI
 from binascii import Error
 from DateBase.db import engine, Base
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
 
 app = FastAPI(title="main_app")
-
+origins = [
+    "http://localhost:8000",
+    "http://localhost:8001",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"],
+    allow_headers=["Content-Type",
+                   "Set-Cookie",
+                   "Access-Control-Allow-Headers", "Access-Control-Allow-Origin",
+                   "Authorization"],
+)
 
 @app.get("/")
 async def create_db():

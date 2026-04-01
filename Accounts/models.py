@@ -7,5 +7,5 @@ from  DateBase.db import Base
 class Account(Base):
     __tablename__ = 'accounts'
 
-    id: Mapped[int] = mapped_column (primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True, autoincrement=True)
     balance: Mapped[float] = mapped_column(default=0.0)
