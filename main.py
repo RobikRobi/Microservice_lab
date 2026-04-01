@@ -17,7 +17,7 @@ async def create_db():
         except Error as e:
             print(e)     
         await  conn.run_sync(Base.metadata.create_all)
-    return({"msg":"db create! =)"})
+    return({"msg":"True"})
 
 
 @app.post("/create_account")
@@ -26,4 +26,4 @@ async def create_account(url: str, value: float):
         form_data = {"value": value}
         print(form_data)
         response = await client.post(url=url, data=form_data)
-        return {"status": "200"}
+        return response.json()
