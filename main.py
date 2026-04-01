@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from binascii import Error
 from DateBase.db import engine, Base
 from fastapi.middleware.cors import CORSMiddleware
+from Accounts.models import Account
 
 
 

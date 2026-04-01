@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column
-from  DateBase.db import Base
+from DateBase.db import Base
 
 
 
