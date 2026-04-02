@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, status, Form, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from Accounts.models import Account
+from Fines.shema import FineUpdate
 from DateBase.db import get_session
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -28,13 +29,13 @@ app.add_middleware(
 
 
 @app.put("/get_account_fines/{account_id}")
-async def get_account_10(account_id: int, 
-                         fine: float, 
+async def get_account_fines(account_id: int, 
+                         fine_data: FineUpdate, 
                          session:AsyncSession = Depends(get_session)):
     account = await session.scalar(select(Account).where(Account.id==account_id))
     if not account:
         raise HTTPException(status_code=404, detail="Account not found")
     await session.refresh(account)
-    account.balance = account.balance - account.balance * 0.1
+    account.balance = account.balance - account.balance * fine_data.fine
     return account
 
