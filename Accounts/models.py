@@ -9,3 +9,4 @@ class Account(Base):
 
     id: Mapped[int] = mapped_column (primary_key=True, autoincrement=True)
     balance: Mapped[float] = mapped_column(default=0.0)
+    bonuses: Mapped[int] = mapped_column(default=0)

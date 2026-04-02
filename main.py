@@ -66,3 +66,12 @@ async def get_account_fines(url: str, account_id: int, fine):
             return {"error": "Remote server error", "details": response.text}
         return response.json()
 
+@app.put("/get_account_bonuses")
+async def get_account_bonuses(url: str, account_id: int, bonus):
+    async with httpx.AsyncClient() as client:
+        target_url = f"{url}/{account_id}"
+        params = {"bonuses": bonus}
+        response = await client.put(target_url, json=params)
+        if response.status_code != 200:
+            return {"error": "Remote server error", "details": response.text}
+        return response.json()
