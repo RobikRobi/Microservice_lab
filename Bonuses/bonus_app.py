@@ -34,9 +34,24 @@ async def get_account_bonus(account_id: int,
     account = await session.scalar(select(Account).where(Account.id==account_id))
     if not account:
         raise HTTPException(status_code=404, detail="Account not found")
-    print(type(bonus_data))
-    print(bonus_data)
     await session.refresh(account)
     account.bonuses += bonus_data.bonuses
+    await session.commit()
+    return account
+
+@app.put("/accrue_bonuses/{account_id}")
+async def get_accrue_bonuses(account_id: int,
+                             session:AsyncSession = Depends(get_session)):
+    account = await session.scalar(select(Account).where(Account.id == account_id))
+
+    if not account:
+        raise HTTPException(status_code=404, detail="Account not found")
+    
+    if account.bonuses == 0:
+        raise HTTPException(status_code=400, detail="You have no accrued bonuses")
+    
+    account.balance += account.bonuses
+    account.bonuses = 0
+
     await session.commit()
     return account

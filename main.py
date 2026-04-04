@@ -38,40 +38,64 @@ async def create_db():
 
 
 @app.post("/create_account")
-async def create_account(url: str, value: float):
+async def create_account_url(url: str, value: float):
     async with httpx.AsyncClient() as client:
         form_data = {"value": value}
         response = await client.post(url=url, data=form_data)
+        response.raise_for_status()
+
         return response.json()
 
 @app.get("/accounts")
-async def create_account(url: str):
+async def create_account_url(url: str):
     async with httpx.AsyncClient() as client:
         response = await client.get(url=url)
+        response.raise_for_status()
+
         return response.json()
     
 @app.get("/get_account")
-async def create_account(url: str, account_id: int):
+async def create_account_url(url: str, account_id: int):
     async with httpx.AsyncClient() as client:
         response = await client.get(url=f"{url}/{account_id}")
+        response.raise_for_status()
+
         return response.json()
     
 @app.put("/get_account_fines")
-async def get_account_fines(url: str, account_id: int, fine):
+async def get_account_fines_url(url: str, account_id: int, fine):
     async with httpx.AsyncClient() as client:
         target_url = f"{url}/{account_id}"
         params = {"fine": fine}
         response = await client.put(target_url, json=params)
-        if response.status_code != 200:
-            return {"error": "Remote server error", "details": response.text}
+        response.raise_for_status()
+
         return response.json()
 
 @app.put("/get_account_bonuses")
-async def get_account_bonuses(url: str, account_id: int, bonus):
+async def get_account_bonuses_url(url: str, account_id: int, bonus):
     async with httpx.AsyncClient() as client:
         target_url = f"{url}/{account_id}"
         params = {"bonuses": bonus}
         response = await client.put(target_url, json=params)
-        if response.status_code != 200:
-            return {"error": "Remote server error", "details": response.text}
+        response.raise_for_status()
+
         return response.json()
+    
+@app.put("/accrue_bonuses")
+async def get_accrue_bonuses_url(url: str, account_id: int):
+    async with httpx.AsyncClient() as client:
+        target_url = f"{url}/{account_id}"
+        response = await client.put(target_url)
+
+        try:
+            response = await client.put(target_url)
+            response.raise_for_status()
+            return response.json()
+
+        except httpx.HTTPStatusError as e:
+            return {
+                "error": "Remote service error",
+                "status_code": e.response.status_code,
+                "details": e.response.json()
+            }
